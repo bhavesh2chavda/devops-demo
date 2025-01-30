@@ -74,9 +74,12 @@
   },
   "devDependencies": {},
   "scripts": {
+    "build": "echo 'Building project...'", 
+    "start": "node service-worker.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC"
+  
 }
