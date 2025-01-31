@@ -1,0 +1,36 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm ci  # Installs dependencies based on package-lock.json
+  displayName: 'Install Dependencies'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/node_modules'
+    Contents: '**/*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/node_modules'
+  displayName: 'Copy node_modules to Artifact Staging Directory'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)/node_modules'
+    artifactName: 'node_modules'
+  displayName: 'Publish node_modules as Artifact'
+
+- script: |
+    npm run build
+  displayName: 'Build Project'
+
+- script: |
+    npm start
+  displayName: 'Start Server'
